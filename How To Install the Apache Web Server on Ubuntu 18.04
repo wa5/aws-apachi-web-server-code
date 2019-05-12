@@ -1,0 +1,70 @@
+Introduction
+The Apache HTTP server is the most widely-used web server in the world.
+It provides many powerful features, including dynamically loadable modules,
+robust media support, and extensive integration with other popular software.
+
+In this guide, we'll explain how to install an Apache web server on your Ubuntu 18.04 server.
+Step 1 — Installing Apache
+Apache is available within Ubuntu's default software repositories, so you can install it using conventional package management tools.
+
+Update your local package index:
+
+$ sudo apt update
+Install the apache2 package:
+
+$ sudo apt install apache2
+
+Step 2 — Adjusting the Firewall
+
+Check the available ufw application profiles:
+
+$ sudo ufw app list
+
+
+Output
+Available applications:
+  Apache
+  Apache Full
+  Apache Secure
+  OpenSSH
+Let's enable the most restrictive profile that will still allow the traffic you've configured,
+permitting traffic on port 80 (normal, unencrypted web traffic):
+
+$ sudo ufw allow 'Apache'
+
+Verify the change:
+
+$ sudo ufw status
+
+Output
+
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Apache                     ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Apache (v6)                ALLOW       Anywhere (v6)
+
+
+Step 3 — Checking your Web Server
+Check with the systemd init system to make sure the service is running by typing:
+
+$ sudo systemctl status apache2
+
+Output
+● apache2.service - The Apache HTTP Server
+   Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+  Drop-In: /lib/systemd/system/apache2.service.d
+           └─apache2-systemd.conf
+   Active: active (running) since Tue 2018-04-24 20:14:39 UTC; 9min ago
+ Main PID: 2583 (apache2)
+    Tasks: 55 (limit: 1153)
+   CGroup: /system.slice/apache2.service
+           ├─2583 /usr/sbin/apache2 -k start
+           ├─2585 /usr/sbin/apache2 -k start
+           └─2586 /usr/sbin/apache2 -k start
+Access the default Apache landing page to confirm that the software is running properly through your IP address:
+
+http://your_server_ip
